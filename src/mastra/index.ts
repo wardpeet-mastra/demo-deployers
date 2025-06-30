@@ -3,6 +3,7 @@ import { PinoLogger } from "@mastra/loggers";
 import { weatherAgent } from "./agents/weather-agent";
 import { NetlifyDeployer } from "@mastra/deployer-netlify";
 import { VercelDeployer } from "@mastra/deployer-vercel";
+import { CloudflareDeployer } from "@mastra/deployer-cloudflare";
 import { researchAgent } from "./agents/research-agent";
 
 export const mastra = new Mastra({
@@ -11,5 +12,14 @@ export const mastra = new Mastra({
     name: "Mastra",
     level: "info",
   }),
-  deployer: process.env.VERCEL ? new VercelDeployer() : new NetlifyDeployer(),
+  deployer: process.env.VERCEL
+    ? new VercelDeployer()
+    : process.env.CLOUDFLARE_ACCOUNT_ID
+    ? new CloudflareDeployer({
+        scope: process.env.CLOUDFLARE_ACCOUNT_ID,
+        auth: {
+          apiToken: process.env.CLOUDFLARE_API_TOKEN!,
+        },
+      })
+    : new NetlifyDeployer(),
 });
