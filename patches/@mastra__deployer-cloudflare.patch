@@ -1,13 +1,13 @@
 diff --git a/dist/index.js b/dist/index.js
-index 78bd0669875fd9c152a4d77763be110dfa87265a..2ae6f01169973c96aac97cdd58984b9f7aa51dcb 100644
+index 78bd0669875fd9c152a4d77763be110dfa87265a..e59013fa5e576c76903f4fb603123cc9dddbe892 100644
 --- a/dist/index.js
 +++ b/dist/index.js
-@@ -66,13 +66,16 @@ var CloudflareDeployer = class extends Deployer {
+@@ -66,13 +66,17 @@ var CloudflareDeployer = class extends Deployer {
    getEntry() {
      return `
      import '#polyfills';
 -    import { mastra } from '#mastra';
-     import { createHonoServer } from '#server';
+-    import { createHonoServer } from '#server';
      import { evaluate } from '@mastra/core/eval';
      import { AvailableHooks, registerHook } from '@mastra/core/hooks';
      import { TABLE_EVALS } from '@mastra/core/storage';
@@ -15,12 +15,14 @@ index 78bd0669875fd9c152a4d77763be110dfa87265a..2ae6f01169973c96aac97cdd58984b9f
  
 +    export default {
 +      fetch: async (request, env, context) => {
-+        const mastra = (await import('#mastra')).mastra;
++
++    const { createHonoServer } = await import('#server');
++    const { mastra } = await import('#mastra');
 +
      registerHook(AvailableHooks.ON_GENERATION, ({ input, output, metric, runId, agentName, instructions }) => {
        evaluate({
          agentName,
-@@ -111,8 +114,6 @@ var CloudflareDeployer = class extends Deployer {
+@@ -111,8 +115,6 @@ var CloudflareDeployer = class extends Deployer {
        }
      });
  
