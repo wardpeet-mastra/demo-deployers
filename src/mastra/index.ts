@@ -5,6 +5,7 @@ import { NetlifyDeployer } from "@mastra/deployer-netlify";
 import { VercelDeployer } from "@mastra/deployer-vercel";
 import { CloudflareDeployer } from "@mastra/deployer-cloudflare";
 import { researchAgent } from "./agents/research-agent";
+import { store } from "./stores/pg";
 
 export const mastra = new Mastra({
   agents: { weatherAgent, researchAgent },
@@ -12,6 +13,7 @@ export const mastra = new Mastra({
   //   name: "Mastra",
   //   level: "info",
   // }),
+  storage: store,
   deployer: process.env.VERCEL
     ? new VercelDeployer()
     : process.env.CLOUDFLARE_ACCOUNT_ID

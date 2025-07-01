@@ -4,6 +4,7 @@ import { weatherTool } from "../tools/weather-tool";
 import { Memory } from "@mastra/memory";
 import { PostgresStore } from "@mastra/pg";
 import { z } from "zod";
+import { store } from "../stores/pg";
 
 export const weatherAgent = new Agent({
   name: "Weather Agent",
@@ -38,9 +39,6 @@ export const weatherAgent = new Agent({
         }),
       },
     },
-    storage: new PostgresStore({
-      connectionString:
-        "postgresql://postgres.rmhfybpfnykanqddfyjh:Zue8XbZqVpwszTsR@aws-0-eu-north-1.pooler.supabase.com:6543/postgres",
-    }),
+    storage: store,
   }),
 });
