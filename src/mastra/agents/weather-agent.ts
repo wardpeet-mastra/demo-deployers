@@ -1,6 +1,9 @@
 import { openai } from "@ai-sdk/openai";
 import { Agent } from "@mastra/core/agent";
 import { weatherTool } from "../tools/weather-tool";
+import { Memory } from "@mastra/memory";
+import { PostgresStore } from "@mastra/pg";
+import { z } from "zod";
 
 export const weatherAgent = new Agent({
   name: "Weather Agent",
@@ -18,4 +21,26 @@ export const weatherAgent = new Agent({
 `,
   model: openai("gpt-4o-mini"),
   tools: { weatherTool },
+  memory: new Memory({
+    options: {
+      workingMemory: {
+        enabled: true,
+        schema: z.object({
+          items: z.array(
+            z.object({
+              location: z.string().optional(),
+              weather: z.string().optional(),
+              temperature: z.string().optional(),
+              humidity: z.string().optional(),
+              windSpeed: z.string().optional(),
+            })
+          ),
+        }),
+      },
+    },
+    storage: new PostgresStore({
+      connectionString:
+        "postgresql://postgres.rmhfybpfnykanqddfyjh:Zue8XbZqVpwszTsR@aws-0-eu-north-1.pooler.supabase.com:6543/postgres",
+    }),
+  }),
 });

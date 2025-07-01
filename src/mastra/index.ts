@@ -8,10 +8,10 @@ import { researchAgent } from "./agents/research-agent";
 
 export const mastra = new Mastra({
   agents: { weatherAgent, researchAgent },
-  logger: new PinoLogger({
-    name: "Mastra",
-    level: "info",
-  }),
+  // logger: new PinoLogger({
+  //   name: "Mastra",
+  //   level: "info",
+  // }),
   deployer: process.env.VERCEL
     ? new VercelDeployer()
     : process.env.CLOUDFLARE_ACCOUNT_ID
